@@ -34,25 +34,6 @@ java {
     }
 }
 
-publishing {
-    repositories {
-        maven {
-            name = artifactId
-            url = uri("https://maven.pkg.github.com/amedmoore/$artifactId")
-            credentials {
-                username = System.getenv("GITHUB_USERNAME")
-                password = System.getenv("GITHUB_PASSWORD")
-            }
-        }
-    }
-
-    publications {
-        register<MavenPublication>("gpr") {
-            from(components["java"])
-        }
-    }
-}
-
 nmcp {
     publishAllPublications {
         username = System.getenv("MAVEN_USERNAME")
