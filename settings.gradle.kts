@@ -7,3 +7,4 @@ plugins {
 rootProject.name = "ktor-validate"
 
 include("lib")
+project(":lib").name = rootProject.name
