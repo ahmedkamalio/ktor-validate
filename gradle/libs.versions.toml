@@ -2,10 +2,23 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
+kotlin = "1.9.20"
 ktor = "2.3.8"
+nmcp = "0.0.4"
+maven-publish = "0.27.0"
 
-[libraries]
-ktor-server-request-validation = { module = "io.ktor:ktor-server-request-validation-jvm", version.ref = "ktor" }
+[libraries.ktor-server-request-validation]
+module = "io.ktor:ktor-server-request-validation-jvm"
+version.ref = "ktor"
 
-[plugins]
-jvm = { id = "org.jetbrains.kotlin.jvm", version = "1.9.20" }
+[plugins.jvm]
+id = "org.jetbrains.kotlin.jvm"
+version.ref = "kotlin"
+
+[plugins.gradle-maven-publish]
+id = "com.vanniktech.maven.publish"
+version.ref = "maven-publish"
+
+[plugins.nmcp]
+id = "com.gradleup.nmcp"
+version.ref = "nmcp"

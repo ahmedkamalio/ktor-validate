@@ -2,13 +2,15 @@
 
 plugins {
     alias(libs.plugins.jvm)
+    alias(libs.plugins.gradle.maven.publish)
+    alias(libs.plugins.nmcp)
     `java-library`
-    `maven-publish`
 }
 
-group = "com.amedmoore"
-version = "0.0.1"
-description = "Adds validation annotations support for Ktor and Request Validation plugin."
+group = property("GROUP").toString()
+version = property("VERSION_NAME").toString()
+description = property("DESCRIPTION").toString()
+val artifactId = property("POM_ARTIFACT_ID").toString()
 
 repositories {
     mavenCentral()
@@ -35,11 +37,11 @@ java {
 publishing {
     repositories {
         maven {
-            name = rootProject.name
-            url = uri("https://maven.pkg.github.com/amedmoore/${rootProject.name}")
+            name = artifactId
+            url = uri("https://maven.pkg.github.com/amedmoore/$artifactId")
             credentials {
-                username = System.getenv("MAVEN_USERNAME")
-                password = System.getenv("MAVEN_PASSWORD")
+                username = System.getenv("GITHUB_USERNAME")
+                password = System.getenv("GITHUB_PASSWORD")
             }
         }
     }
@@ -48,5 +50,13 @@ publishing {
         register<MavenPublication>("gpr") {
             from(components["java"])
         }
+    }
+}
+
+nmcp {
+    publishAllPublications {
+        username = System.getenv("MAVEN_USERNAME")
+        password = System.getenv("MAVEN_PASSWORD")
+        publicationType = "AUTOMATIC"
     }
 }

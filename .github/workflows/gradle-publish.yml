@@ -45,5 +45,11 @@ jobs:
     - name: Publish to GitHub Packages
       run: ./gradlew publish
       env:
-        MAVEN_USERNAME: ${{ github.actor }}
-        MAVEN_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_USERNAME: ${{ github.actor }}
+        GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Publish to Maven Central
+      run: ./gradlew publishAllPublicationsToCentralPortal
+      env:
+        MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+        MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
