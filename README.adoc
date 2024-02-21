@@ -4,7 +4,7 @@
 
 == Overview
 
-Adds validation annotations support for the https://ktor.io[Ktor] with https://ktor.io/docs/request-validation.html[Request Validation plugin].
+Adds validation annotations support for https://ktor.io[Ktor] and https://ktor.io/docs/request-validation.html[Request Validation plugin].
 
 == Features
 
@@ -75,7 +75,7 @@ routing {
 
 5. **Optionally (but actually recommended) install the https://ktor.io/docs/status-pages.html[Status Pages plugin]:**
 +
-This plugin will allow for custom responses for validation exceptions (or any status for your liking):
+This plugin enables the customization of responses for validation exceptions or any preferred status:
 +
 [,kotlin]
 ----
