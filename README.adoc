@@ -1,0 +1,136 @@
+= Ktor Validate
+
+:source-highlighter: highlight.js
+
+== Overview
+
+Adds validation annotations support for the https://ktor.io[Ktor] with https://ktor.io/docs/request-validation.html[Request Validation plugin].
+
+== Features
+
+- Easily annotate data class properties with validation annotations.
+- Built-in constraints such as length, email format, IP address format, etc.
+- Support for custom validation annotations.
+
+== Usage
+
+1. **Install this library:**
++
+[,kotlin]
+----
+implementation("com.amedmoore:ktor-validate:0.0.1")
+----
+
+2. **Install the https://ktor.io/docs/request-validation.html[Request Validation plugin]:**
++
+For more details about the installation process refer to the plugin's https://ktor.io/docs/request-validation.html[page].
++
+[,kotlin]
+----
+implementation("io.ktor:ktor-server-request-validation:$ktor_version")
+----
+
+3. **Annotate Data Class Properties:**
++
+Annotate properties in your data class with the desired validation annotations.
+For example:
++
+[,kotlin]
+----
+import com.amedmoore.ktor.validate.annotations.*
+
+@Serializable
+data class User(
+    @Length(36, message = "ID must be exactly 36 characters long")
+    val id: String, // 36 for a UUID
+
+    @Min(2, message = "Name must be at least 2 characters long")
+    @Max(12, message = "Name must be 12 characters long maximum")
+    val name: String,
+
+    @Email(message = "Invalid email address")
+    val email: String
+)
+----
+
+4. **Perform Validation in your requests:**
++
+Use the `Routing.validate` or `Route.validate` functions to perform validation on the `Routing` level or `Route` level respectively:
++
+[,kotlin]
+----
+routing {
+    validate<User>() // global routing validation
+
+    route {
+        validate<User>() // per route validation
+
+        post {
+            // request body will always be valid here.
+            val body = call.reveive<User>()
+        }
+    }
+}
+----
+
+5. **Optionally (but actually recommended) install the https://ktor.io/docs/status-pages.html[Status Pages plugin]:**
++
+This plugin will allow for custom responses for validation exceptions (or any status for your liking):
++
+[,kotlin]
+----
+install(StatusPages) {
+    exception<RequestValidationException> { call, cause ->
+        // cause.reasons are the validation messages from your data class.
+        call.respond(HttpStatusCode.BadRequest, cause.reasons)
+    }
+}
+----
+
+== Built-in Validation Annotations
+
+|===
+|Annotation Class |Description |Options
+
+|`@DomainName`
+|Validates a fully qualified domain name, optionally allows for IP addresses
+|`message`, `allowIpAddress`
+
+|`@Email`
+|Validates an email address, optionally allows IP addresses in the domain part, set custom max-length, or allow UTF-8 username parts
+|`message`, `maxLength`, `allowIpAddress`, `allowUtf8LocalPart`
+
+|`@IP`
+|Validates an IP address. Can set an explicit version (V4 or V6).
+|`message`, `version`
+
+|`@Length(length: Int)`
+|Validates an exact length of String, Map, or List.
+|`message`, `length`
+
+|`@Min(min: Int)`
+|Validates the minimum length of String, Map, or List.
+|`message`, `min`
+
+|`@Max(max: Int)`
+|Validates the maximum length of String, Map, or List.
+|`message`, `max`
+|===
+
+== Running Tests
+
+To run tests, use the following command:
+
+[,bash]
+----
+./gradlew test
+----
+
+== License
+
+This validation library is licensed under the MIT License - see the link:LICENSE[LICENSE] file for details.
+
+== Contribution
+
+Contributions are welcome!
+Please open an issue or submit a pull request.
